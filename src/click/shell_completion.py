@@ -429,10 +429,17 @@ class FishComplete(ShellComplete):
         .. versionchanged:: 8.3
             Escape newlines in help text to fix completion errors
             with multi-line help strings.
+
+        .. versionchanged:: 8.4
+            Optimized string replace operations by checking for
+            newlines before replacing (performance improvement).
         """
         help_ = item.help or "_"
-        value = item.value.replace("\n", r"\n")
-        help_escaped = help_.replace("\n", r"\n")
+
+        # Optimized: Only replace if newlines are present
+        value = item.value.replace("\n", r"\n") if "\n" in item.value else item.value
+        help_escaped = help_.replace("\n", r"\n") if "\n" in help_ else help_
+
         return f"{item.type}\n{value}\n{help_escaped}"
 
 

@@ -1,0 +1,53 @@
+======================================================================
+CLICK PROFILING BENCHMARK - TIME PROFILING
+======================================================================
+
+1. Benchmarking FishComplete.format_completion()...
+   Iterations: 10,000
+   Total time: 0.0157 s
+   Average time per iteration: 0.0016 ms
+   Average time per item: 0.3927 μs
+
+2. Benchmarking string.replace() - BEFORE optimization...
+   Iterations: 100,000
+   Total time: 0.0737 s
+   Average time per iteration: 0.7370 μs
+
+3. Benchmarking string.replace() - AFTER optimization...
+   Iterations: 100,000
+   Total time: 0.0442 s
+   Average time per iteration: 0.4418 μs
+
+4. COMPARISON:
+   BEFORE: 0.7370 μs per iteration
+   AFTER:  0.4418 μs per iteration
+   IMPROVEMENT: 40.05%
+   TIME SAVED (100k iterations): 0.0295 s
+
+5. cProfile analysis (top 20 functions):
+----------------------------------------------------------------------
+         9598 function calls (9597 primitive calls) in 0.005 seconds
+
+   Ordered by: cumulative time
+   List reduced from 43 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    0.005    0.005 /mnt/c/School/ESS-Issue/click/profiling_benchmark.py:39(benchmark_fish_format_completion)
+     4000    0.002    0.000    0.003    0.000 /mnt/c/School/ESS-Issue/click/src/click/shell_completion.py:423(format_completion)
+     2000    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+     2000    0.000    0.000    0.000    0.000 {built-in method time.perf_counter}
+        1    0.000    0.000    0.000    0.000 /home/solte/.pyenv/versions/3.11.4/lib/python3.11/unittest/mock.py:1102(__init__)
+        1    0.000    0.000    0.000    0.000 /home/solte/.pyenv/versions/3.11.4/lib/python3.11/unittest/mock.py:436(__init__)
+        1    0.000    0.000    0.000    0.000 /home/solte/.pyenv/versions/3.11.4/lib/python3.11/unittest/mock.py:505(_mock_add_spec)
+       25    0.000    0.000    0.000    0.000 /home/solte/.pyenv/versions/3.11.4/lib/python3.11/asyncio/coroutines.py:21(iscoroutinefunction)
+       25    0.000    0.000    0.000    0.000 /home/solte/.pyenv/versions/3.11.4/lib/python3.11/inspect.py:409(iscoroutinefunction)
+       25    0.000    0.000    0.000    0.000 /home/solte/.pyenv/versions/3.11.4/lib/python3.11/inspect.py:391(_has_code_flag)
+        1    0.000    0.000    0.000    0.000 /home/solte/.pyenv/versions/3.11.4/lib/python3.11/unittest/mock.py:420(__new__)
+     1000    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 /home/solte/.pyenv/versions/3.11.4/lib/python3.11/inspect.py:3214(bind_partial)
+       25    0.000    0.000    0.000    0.000 /home/solte/.pyenv/versions/3.11.4/lib/python3.11/inspect.py:2077(_signature_is_functionlike)
+        1    0.000    0.000    0.000    0.000 /home/solte/.pyenv/versions/3.11.4
+
+======================================================================
+PROFILING COMPLETE - Results saved to PROFILING_REPORT.md
+======================================================================
