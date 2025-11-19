@@ -1,9 +1,3 @@
-# Meranie pokrytia kódu testami
-
-**Autor:** René Solteš
-**Projekt:** Click
-**Vetva:** coverage-testing
-
 ## 1. Výsledky PRED pridaním testov
 
 ```bash
