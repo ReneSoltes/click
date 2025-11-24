@@ -1,27 +1,30 @@
-## 1. Výsledky PRED optimalizáciou
-
-### Benchmark
+## 1. FishComplete.format_completion() benchmark
 
 ```bash
 python profiling_benchmark.py
 ```
 
-**cProfile výstup:**
+**Výsledky:**
 ```
-ncalls  tottime  cumtime  function
-100000  0.071   0.092    format_completion()
-200000  0.021   0.021    str.replace()
+Iterations: 10,000
+Total time: 0.0158 s
+Average time per iteration: 0.0016 ms
+Average time per item: 0.3956 μs
 ```
 
-| Metrika | Hodnota |
-|---------|---------|
-| Total time | 0.0735 s |
-| Avg per operation | 0.7345 μs |
-| Replace calls | 200,000 |
+## 2. String replace - PRED optimalizáciou
+
+**Testované s 1,000,000 iterácií**
+
+| Metrika              | Hodnota    |
+|----------------------|------------|
+| Total time           | 0.8163 s   |
+| Avg per operation    | 0.8163 μs  |
+| Replace calls        | 200,000    |
 
 **Bottleneck:** `str.replace()` sa volá aj keď string neobsahuje `\n`
 
-## 2. Implementovaná optimalizácia
+## 3. Implementovaná optimalizácia
 
 ### Zmena v `src/click/shell_completion.py`
 
@@ -40,42 +43,42 @@ help_escaped = help_.replace("\n", r"\n") if "\n" in help_ else help_
 
 **Princíp:** Skontroluj či string obsahuje `\n` pred volaním `replace()`
 
-## 3. Výsledky PO optimalizácii
+## 4. String replace - PO optimalizácii
 
-```bash
-python profiling_benchmark.py
-```
+**Testované s 1,000,000 iterácií**
 
-**cProfile výstup:**
-```
-ncalls  tottime  cumtime  function
-100000  0.044   0.055    format_completion()
-50000   0.006   0.006    str.replace()
-```
+| Metrika              | Hodnota    |
+|----------------------|------------|
+| Total time           | 0.4529 s   |
+| Avg per operation    | 0.4529 μs  |
+| Replace calls        | 50,000     |
 
-| Metrika | Hodnota |
-|---------|---------|
-| Total time | 0.0442 s |
-| Avg per operation | 0.4418 μs |
-| Replace calls | 50,000 |
+## 5. Porovnanie PRED vs. PO
 
-## 4. Porovnanie PRED vs. PO
-
-| Metrika | PRED | PO | Zlepšenie |
-|---------|------|-----|-----------|
-| **Total time** | 0.0735 s | 0.0442 s | **-40.05%** |
-| **Avg per operation** | 0.7345 μs | 0.4418 μs | **-40.05%** |
-| **Replace calls** | 200,000 | 50,000 | **-75%** |
-| **Time saved** | - | 0.0293 s | - |
+| Metrika              | PRED       | PO         | Zlepšenie   |
+|----------------------|------------|------------|-------------|
+| **Total time**       | 0.8163 s   | 0.4529 s   | **-44.52%** |
+| **Avg per operation**| 0.8163 μs  | 0.4529 μs  | **-44.52%** |
+| **Replace calls**    | 200,000    | 50,000     | **-75%**    |
+| **Time saved**       | -          | 0.3634 s   | -           |
 
 **Hlavné zlepšenia:**
-- Čas: -40.05%
+- Čas: -44.52%
 - Function calls: -75%
 
-## 5. Overenie
+## 6. cProfile analýza
 
-Všetky testy prejdú:
-```bash
-pytest tests/test_shell_completion.py -v
-# Result: 53 passed ✅
+**Top funkcie (zoradené podľa cumulative time):**
+
 ```
+         9598 function calls (9597 primitive calls) in 0.007 seconds
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.002    0.002    0.007    0.007 profiling_benchmark.py:43(benchmark_fish_format_completion)
+     4000    0.003    0.000    0.003    0.000 src/click/shell_completion.py:423(format_completion)
+     2000    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
+     2000    0.000    0.000    0.000    0.000 {built-in method time.perf_counter}
+     1000    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+```
+
+**Nástroj:** Python cProfile (Time profiling)

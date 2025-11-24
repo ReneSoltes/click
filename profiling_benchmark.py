@@ -65,7 +65,7 @@ def benchmark_fish_format_completion(iterations=10000):
     return results
 
 
-def benchmark_string_replace_operations(iterations=100000):
+def benchmark_string_replace_operations(iterations=1000000):
     """Benchmark string replace operations - BEFORE optimization."""
     test_strings = [
         "Simple text without newlines",
@@ -87,7 +87,7 @@ def benchmark_string_replace_operations(iterations=100000):
     return results
 
 
-def benchmark_string_replace_optimized(iterations=100000):
+def benchmark_string_replace_optimized(iterations=1000000):
     """Benchmark string replace operations - AFTER optimization."""
     test_strings = [
         "Simple text without newlines",
@@ -147,22 +147,22 @@ if __name__ == "__main__":
 
     # 2. String replace - BEFORE optimization
     print("2. Benchmarking string.replace() - BEFORE optimization...")
-    results_before = benchmark_string_replace_operations(iterations=100000)
+    results_before = benchmark_string_replace_operations(iterations=1000000)
     avg_before = sum(results_before) / len(results_before)
     total_before = sum(results_before)
 
-    print("   Iterations: 100,000")
+    print("   Iterations: 1,000,000")
     print(f"   Total time: {total_before:.4f} s")
     print(f"   Average time per iteration: {avg_before * 1000000:.4f} μs")
     print()
 
     # 3. String replace - AFTER optimization
     print("3. Benchmarking string.replace() - AFTER optimization...")
-    results_after = benchmark_string_replace_optimized(iterations=100000)
+    results_after = benchmark_string_replace_optimized(iterations=1000000)
     avg_after = sum(results_after) / len(results_after)
     total_after = sum(results_after)
 
-    print("   Iterations: 100,000")
+    print("   Iterations: 1,000,000")
     print(f"   Total time: {total_after:.4f} s")
     print(f"   Average time per iteration: {avg_after * 1000000:.4f} μs")
     print()
@@ -175,7 +175,7 @@ if __name__ == "__main__":
     print(f"   BEFORE: {avg_before * 1000000:.4f} μs per iteration")
     print(f"   AFTER:  {avg_after * 1000000:.4f} μs per iteration")
     print(f"   IMPROVEMENT: {improvement:.2f}%")
-    print(f"   TIME SAVED (100k iterations): {time_saved:.4f} s")
+    print(f"   TIME SAVED (1M iterations): {time_saved:.4f} s")
     print()
 
     # 5. cProfile analysis
